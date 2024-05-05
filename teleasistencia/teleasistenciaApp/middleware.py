@@ -50,7 +50,7 @@ def _log_action_request(request, response):
             direccion_ip=request.META.get('REMOTE_ADDR'),
             user=request.user,
             ruta=request.path,
-            query=request.scope['query_string'].decode(),
+            query=request.META.get('QUERY_STRING', ''),
             metodo_http=request.method,
             estado_http=response.status_code,
         )

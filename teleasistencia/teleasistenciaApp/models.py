@@ -39,7 +39,7 @@ class Logs_AccionesUsuarios(models.Model):
     def __str__(self):
         return "[LOG_Accion][%s] '%s' @ [%s] [%s] || %s %s%s => %s" % (
             self.id, self.user.username, self.direccion_ip, self.timestamp,
-            self.metodo_http, self.ruta, self.query, self.estado_http
+            self.metodo_http, self.ruta, ('' if len(self.query) <= 0 else '?') + self.query, self.estado_http
         )
 
 class Logs_ConexionesUsuarios(models.Model):
