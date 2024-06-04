@@ -1,0 +1,1 @@
+API_V2_BASE_PATH = "v2"

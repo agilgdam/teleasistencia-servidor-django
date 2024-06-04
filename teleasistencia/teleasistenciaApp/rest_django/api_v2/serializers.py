@@ -25,10 +25,9 @@ class GroupSerializer(serializers.ModelSerializer):
     """Serializador para los grupos de Django."""
     class Meta:
         model = Group
-        fields = ("pk", "name",)
+        fields = ("pk", "name", "permissions",)
 
 
-# TODO: Cambiar esta implementación, que es la que venía en la v1
 class UserSerializer(serializers.ModelSerializer):
     """Serializador para los usuarios de Django."""
     groups = GroupSerializer(many=True)
@@ -97,7 +96,7 @@ class ClasificacionRecursoComunitarioSerializer(serializers.ModelSerializer):
     """Serializador para el modelo Clasificacion_Recurso_Comunitario"""
     class Meta:
         model = Clasificacion_Recurso_Comunitario
-        fields = ("id", "nombre", )
+        fields = ("id", "nombre",)
 
 
 class TipoRecursoComunitarioSerializer(serializers.ModelSerializer):
@@ -107,7 +106,7 @@ class TipoRecursoComunitarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tipo_Recurso_Comunitario
-        fields = ("id", "nombre", "clasificacion_recurso_comunitario", )
+        fields = ("id", "nombre", "clasificacion_recurso_comunitario",)
 
     def create(self, validated_data):
         info_clasificacion_recurso = validated_data.get("id_clasificacion_recurso_comunitario")
@@ -127,20 +126,23 @@ class TipoRecursoComunitarioReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tipo_Recurso_Comunitario
-        fields = ("id", "nombre", "clasificacion_recurso_comunitario", )
+        fields = ("id", "nombre", "clasificacion_recurso_comunitario",)
 
 
 class RecursoComunitarioSerializer(serializers.ModelSerializer):
     """Serializador para el modelo Recurso_Comunitario"""
     tipo_recurso_comunitario = TipoRecursoComunitarioSerializer(source="id_tipos_recurso_comunitario")
+    direccion = DireccionSerializer(source="id_direccion")
 
     class Meta:
         model = Recurso_Comunitario
-        fields = ("id", "nombre", "telefono", "tipo_recurso_comunitario", )
-        depth = 1
+        fields = ("id", "nombre", "telefono", "tipo_recurso_comunitario", "direccion",)
 
     def create(self, validated_data):
         info_tipo_recurso = validated_data.get("id_tipos_recurso_comunitario")
+        info_clasificacion_recurso = info_tipo_recurso.get("id_clasificacion_recurso_comunitario")
+        clasificacion_recurso, _ = Clasificacion_Recurso_Comunitario.objects.get_or_create(**info_clasificacion_recurso)
+        info_tipo_recurso["id_clasificacion_recurso_comunitario"] = clasificacion_recurso
         tipo_recurso, _ = Tipo_Recurso_Comunitario.objects.get_or_create(**info_tipo_recurso)
 
         recurso = Recurso_Comunitario.objects.create(
@@ -154,25 +156,25 @@ class RecursoComunitarioSerializer(serializers.ModelSerializer):
 class RecursoComunitarioReadSerializer(serializers.ModelSerializer):
     """Serializador de solo lectura para el modelo Recurso_Comunitario."""
     tipo_recurso_comunitario = TipoRecursoComunitarioSerializer(source="id_tipos_recurso_comunitario", read_only=True)
+    direccion = DireccionSerializer(source="id_direccion", read_only=True)
 
     class Meta:
         model = Recurso_Comunitario
-        fields = ("id", "nombre", "telefono", "tipo_recurso_comunitario",)
-        depth = 1
+        fields = ("id", "nombre", "telefono", "tipo_recurso_comunitario", "direccion",)
 
 
 class TipoViviendaSerializer(serializers.ModelSerializer):
     """Serializador para el modelo Tipo_Vivienda."""
     class Meta:
         model = Tipo_Vivienda
-        fields = ("id", "nombre", )
+        fields = ("id", "nombre",)
 
 
 class TipoSituacionSerializer(serializers.ModelSerializer):
     """Serializador para el modelo Tipo_Situacion."""
     class Meta:
         model = Tipo_Situacion
-        fields = ("id", "nombre", )
+        fields = ("id", "nombre",)
 
 
 class TerminalSerializer(serializers.ModelSerializer):
@@ -184,7 +186,7 @@ class TerminalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Terminal
         fields = ("id", "numero_terminal", "modo_acceso_vivienda", "barreras_arquitectonicas", "modelo_terminal",
-                  "fecha_tipo_situacion", "titular", "tipo_vivienda", "tipo_situacion", )
+                  "fecha_tipo_situacion", "titular", "tipo_vivienda", "tipo_situacion",)
         depth = 1
 
     def create(self, validated_data):

@@ -38,6 +38,10 @@ from rest_framework_simplejwt.views import (
 from django.views.generic.base import RedirectView
 from django.urls import re_path
 
+# Views API REST v2
+from teleasistenciaApp.rest_django.api_v2 import views_rest as views_rest_v2
+from teleasistenciaApp.rest_django.api_v2.const import API_V2_BASE_PATH
+
 #Router para la API REST
 # Con trailing_slash=False hacemos que no intermprete la / final de la url, con esto podemos hacer GET, POST y DELETE
 router = routers.DefaultRouter(trailing_slash=False)
@@ -73,6 +77,22 @@ router.register(r'profile', views_rest.ProfileViewSet)
 router.register(r'desarrollador_tecnologia', views_rest.DesarrolladorTecnologiaViewSet)
 router.register(r'seguimiento_teleoperador', views_rest.SeguimientoTeleoperador)
 
+# API v2
+router.register(rf"{API_V2_BASE_PATH}/groups", views_rest_v2.GroupViewSet)
+router.register(rf"{API_V2_BASE_PATH}/users", views_rest_v2.UserViewSet)
+router.register(rf"{API_V2_BASE_PATH}/persona", views_rest_v2.PersonaViewSet)
+router.register(rf"{API_V2_BASE_PATH}/clasificacion_recurso_comunitario",
+                views_rest_v2.ClasificacionRecursoComunitarioViewSet)
+router.register(rf"{API_V2_BASE_PATH}/tipo_recurso_comunitario", views_rest_v2.TipoRecursoComunitarioViewSet)
+router.register(rf"{API_V2_BASE_PATH}/recurso_comunitario", views_rest_v2.RecursoComunitarioViewSet)
+router.register(rf"{API_V2_BASE_PATH}/tipo_vivienda", views_rest_v2.TipoViviendaViewSet)
+router.register(rf"{API_V2_BASE_PATH}/tipo_situacion", views_rest_v2.TipoSituacionViewSet)
+router.register(rf"{API_V2_BASE_PATH}/terminal", views_rest_v2.TerminalViewSet)
+router.register(rf"{API_V2_BASE_PATH}/tipo_modalidad_paciente", views_rest_v2.TipoModalidadPacienteViewSet)
+router.register(rf"{API_V2_BASE_PATH}/relacion_paciente_persona", views_rest_v2.RelacionPacientePersonaViewSet)
+router.register(rf"{API_V2_BASE_PATH}/clasificacion_alarma", views_rest_v2.ClasificacionAlarmaViewSet)
+router.register(rf"{API_V2_BASE_PATH}/tipo_alarma", views_rest_v2.TipoAlarmaViewSet)
+router.register(rf"{API_V2_BASE_PATH}/alarma", views_rest_v2.AlarmaViewSet)
 
 urlpatterns = [
 #path('admin/', admin.site.urls),
