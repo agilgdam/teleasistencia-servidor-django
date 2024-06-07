@@ -30,7 +30,6 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializador para los usuarios de Django."""
-    groups = GroupSerializer(many=True)
     imagen = V1ImagenUserSerializer(source="imagen_user", read_only=True)
     database_id = serializers.SerializerMethodField()
 
