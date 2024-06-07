@@ -80,6 +80,7 @@ router.register(r'seguimiento_teleoperador', views_rest.SeguimientoTeleoperador)
 # API v2
 router.register(rf"{API_V2_BASE_PATH}/groups", views_rest_v2.GroupViewSet)
 router.register(rf"{API_V2_BASE_PATH}/users", views_rest_v2.UserViewSet)
+router.register(rf"{API_V2_BASE_PATH}/direccion", views_rest_v2.DireccionViewSet)
 router.register(rf"{API_V2_BASE_PATH}/persona", views_rest_v2.PersonaViewSet)
 router.register(rf"{API_V2_BASE_PATH}/clasificacion_recurso_comunitario",
                 views_rest_v2.ClasificacionRecursoComunitarioViewSet)
